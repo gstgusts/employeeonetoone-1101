@@ -70,11 +70,43 @@ public class EmployeeRepository {
         }
     }
 
+    public void delete(Object item) {
+        var session = factory.openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            session.delete(item);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if(tx != null) {
+                tx.rollback();
+            }
+            System.err.println(ex);
+        } finally {
+            session.close();
+        }
+    }
+
     public Address getById(int id) {
         var session = factory.openSession();
 
         try {
             return session.get(Address.class, id);
+        } catch (HibernateException ex) {
+            System.err.println(ex);
+        } finally {
+            session.close();
+        }
+
+        return null;
+    }
+
+    public Employee getEmployeeById(int id) {
+        var session = factory.openSession();
+
+        try {
+            return session.get(Employee.class, id);
         } catch (HibernateException ex) {
             System.err.println(ex);
         } finally {

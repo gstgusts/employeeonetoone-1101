@@ -10,9 +10,32 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<div th:each="emp: ${employees}">
-    <span th:text="${emp.getFirstName()}"></span>
-    <span th:text="${emp.getAddress().getStreet()}"></span>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First name</th>
+            <th scope="col">Street</th>
+            <th scope="col">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="emp: ${employees}">
+            <th scope="row" th:text="${emp.getId()}"></th>
+            <td th:text="${emp.getFirstName()}"></td>
+            <td th:text="${emp.getAddress().getStreet()}"></td>
+            <td>
+                <a th:if="${confirmDelete == 0}" class="btn btn-danger" th:href="${'/confirm/'+emp.getId()}" role="button">Delete</a>
+                <div th:if="${confirmDelete == emp.getId()}">
+                    <span>Do you really want to delete this record?</span>
+                    <a class="btn btn-primary" href="/">Cancel</a>
+                    <a class="btn btn-danger" th:href="${'/delete/'+emp.getId()}">Delete</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
